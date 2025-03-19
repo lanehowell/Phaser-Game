@@ -10,6 +10,54 @@ export class StartingMapScene extends Phaser.Scene {
 
     create() {
 
+        // Load Map
+        const map = this.createMap()
+
+        // Load Player
+        this.player = this.createPlayer()
+
+        // LOAD CAMERA
+        // Follow Player
+        this.cameras.main.startFollow(this.player, true)
+        // Dont allow camera to leave map
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        // Zoom in so map isn't tiny
+        this.cameras.main.setZoom(2.5)
+
+        // Create Movement
+        this.cursors = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
+
+        window.addEventListener('resize', () => {
+            // Ensure player stays centered on resize
+            this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+            this.cameras.main.centerOn(this.player.x, this.player.y)
+        });
+
+    }
+
+    update() {
+        if (this.cursors.left.isDown) {
+            this.player.x -= 2;
+        } else if (this.cursors.right.isDown) {
+            this.player.x += 2;
+        }
+
+        if (this.cursors.up.isDown) {
+            this.player.y -= 2;
+        } else if (this.cursors.down.isDown) {
+            this.player.y += 2;
+        }
+
+        localStorage.setItem('playerX', this.player.x.toString());
+        localStorage.setItem('playerY', this.player.y.toString());
+    }
+
+    createMap() {
         // Load Tilemap
         const map = this.make.tilemap({ key: MAP_KEYS.STARTING_MAP })
         const floors_tiles = map.addTilesetImage('Environment_floors', 'floors_tiles')
@@ -17,7 +65,10 @@ export class StartingMapScene extends Phaser.Scene {
         const wall_tiles = map.addTilesetImage('Environment_walls', 'wall_tiles')
         const ground_layer = map.createLayer('Ground', [floors_tiles, water_tiles, wall_tiles], 0, 0)
         const paths_layer = map.createLayer('Paths', floors_tiles, 0, 0)
+        return map
+    }
 
+    createPlayer() {
         // Load Player
         // Retrieve player position from local storage
         const storedX = localStorage.getItem('playerX');
@@ -39,40 +90,7 @@ export class StartingMapScene extends Phaser.Scene {
 
         this.player.anims.play('idleDown')
 
-        // LOAD CAMERA
-        // Follow Player
-        this.cameras.main.startFollow(this.player, true)
-        // Dont allow camera to leave map
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-        // Zoom in so map isn't tiny
-        this.cameras.main.setZoom(2.5)
-
-        this.cursors = this.input.keyboard.createCursorKeys()
-
-        window.addEventListener('resize', () => {
-            // Ensure player stays centered on resize
-            this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-            this.cameras.main.centerOn(this.player.x, this.player.y)
-        });
-
-    }
-
-    update() {
-
-        if (this.cursors.left.isDown) {
-            this.player.x -= 2;
-        } else if (this.cursors.right.isDown) {
-            this.player.x += 2;
-        }
-
-        if (this.cursors.up.isDown) {
-            this.player.y -= 2;
-        } else if (this.cursors.down.isDown) {
-            this.player.y += 2;
-        }
-
-        localStorage.setItem('playerX', this.player.x.toString());
-        localStorage.setItem('playerY', this.player.y.toString());
+        return this.player
     }
 
 }
