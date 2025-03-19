@@ -20,7 +20,7 @@ export class PreloadScene extends Phaser.Scene {
         // Load Tilesets used for map
         this.load.image('floors_tiles', 'assets/maps/mapTilesets/Floors_Tiles.png')
         this.load.image('wall_tiles', 'assets/maps/mapTilesets/Wall_Tiles.png')
-        this.load.image('water_tiles', 'assets/maps/mapTilesets/Water_Tiles.png')
+        this.load.image('water_tiles', 'https://lanehowell.github.io/Phaser-Game/assets/maps/mapTilesets/Water_Tiles.png')
 
         //Load Player
         this.load.spritesheet('player', 'assets/sprites/player/Idle-Sheet.png', { frameWidth: 32, frameHeight: 32 })
