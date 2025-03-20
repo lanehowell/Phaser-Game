@@ -1,6 +1,8 @@
 // PRELOAD SCENE HANDLES LOADING OF ALL ASSETS NEEDED FOR GAME
 
 import { MAP_KEYS } from "../../assets/maps/mapKeys.js";
+import { TILESET_KEYS } from "../../assets/maps/tilesets/tilesetKeys.js";
+import { SPRITE_KEYS } from "../../assets/sprites/spriteKeys.js";
 import { SCENE_KEYS } from "./SceneKeys.js";
 import { StartingMapScene } from "./StartingMapScene.js";
 
@@ -13,19 +15,19 @@ export class PreloadScene extends Phaser.Scene {
 
     preload() {
 
-        // Load Tilemap
-        const mapsPath = 'assets/maps/'
-        this.load.tilemapTiledJSON(MAP_KEYS.STARTING_MAP, `${mapsPath}startingMap.JSON`)
+        const spritesPath = 'assets/sprites'
+        const mapsPath = 'assets/maps'
+        const frameSize = {frameWidth: 192/4, frameHeight: 192/3}
 
-        // Load Tilesets used for map
-        this.load.image('floors_tiles', 'assets/maps/mapTilesets/Floors_Tiles.png')
-        this.load.image('wall_tiles', 'assets/maps/mapTilesets/Wall_Tiles.png')
-        this.load.image('water_tiles', 'assets/maps/mapTilesets/Water_Tiles.png')
+        // Load Player Assets
+        this.load.spritesheet(SPRITE_KEYS.PLAYER_DOWN, `${spritesPath}/player/playerDown.png`, frameSize)
+        this.load.spritesheet(SPRITE_KEYS.PLAYER_UP, `${spritesPath}/player/playerUp.png`, frameSize)
+        this.load.spritesheet(SPRITE_KEYS.PLAYER_LEFT, `${spritesPath}/player/playerLeft.png`, frameSize)
+        this.load.spritesheet(SPRITE_KEYS.PLAYER_RIGHT, `${spritesPath}/player/playerRight.png`, frameSize)
 
-        //Load Player
-        this.load.spritesheet('player', 'assets/sprites/player/Idle-Sheet.png', { frameWidth: 32, frameHeight: 32 })
-        this.load.spritesheet('playerRun', 'assets/sprites/player/Run-Sheet.png', { frameWidth: 32, frameHeight: 32 })
-
+        // Load Map Assets
+        this.load.image(TILESET_KEYS.BEACH_TILESET, `${mapsPath}/tilesets/beach_tiles.png`)
+        this.load.tilemapTiledJSON(MAP_KEYS.STARTING_MAP, `${mapsPath}/map.json`)
 
     }
 
